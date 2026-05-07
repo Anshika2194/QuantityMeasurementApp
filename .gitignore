@@ -1,0 +1,17 @@
+# Compiled files
+*.class
+*.jar
+*.log
+
+# IntelliJ
+.idea/
+*.iml
+
+# Build folders
+target/
+out/
+build/
+dist/
+
+# OS files
+.DS_Store
