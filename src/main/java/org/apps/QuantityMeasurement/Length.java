@@ -1,7 +1,7 @@
 package org.apps.QuantityMeasurement;
 
 public class Length {
-
+    private static final double EPSILON = 0.000001;
     private final double value;
     private final LengthUnit unit;
 
@@ -27,11 +27,13 @@ public class Length {
     private double convertToBaseUnit() {
         return unit.convertToBaseUnit(value);
     }
+
     public boolean compare(Length other) {
-        return Double.compare(
-                this.convertToBaseUnit(),
-                other.convertToBaseUnit()
-        ) ==0;
+
+        return Math.abs(
+                this.convertToBaseUnit() -
+                        other.convertToBaseUnit()
+        ) < EPSILON;
     }
     public Length convertTo(LengthUnit targetUnit) {
 

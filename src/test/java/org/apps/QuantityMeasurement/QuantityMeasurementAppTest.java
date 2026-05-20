@@ -220,7 +220,6 @@ public class QuantityMeasurementAppTest {
 
         assertFalse(yard.equals(feet));
     }
-
     @Test
     public void testEquality_CentimetersToInches_EquivalentValue() {
 
@@ -228,10 +227,11 @@ public class QuantityMeasurementAppTest {
                 new Length(1.0, LengthUnit.CENTIMETERS);
 
         Length inches =
-                new Length(0.393701, LengthUnit.INCHES);
+                new Length(0.393700787, LengthUnit.INCHES);
 
         assertTrue(cm.equals(inches));
     }
+
     @Test
     public void testEquality_CentimetersToFeet_NonEquivalentValue() {
 
@@ -1090,16 +1090,15 @@ public class QuantityMeasurementAppTest {
     void testLengthUnitEnum_FeetConstant() {
 
         assertEquals(
-                12.0,
+                1.0,
                 LengthUnit.FEET.getConversionFactor()
         );
     }
-
     @Test
     void testLengthUnitEnum_InchesConstant() {
 
         assertEquals(
-                1.0,
+                1.0 / 12.0,
                 LengthUnit.INCHES.getConversionFactor()
         );
     }
@@ -1108,7 +1107,7 @@ public class QuantityMeasurementAppTest {
     void testLengthUnitEnum_YardsConstant() {
 
         assertEquals(
-                36.0,
+                3.0,
                 LengthUnit.YARDS.getConversionFactor()
         );
     }
@@ -1117,12 +1116,11 @@ public class QuantityMeasurementAppTest {
     void testLengthUnitEnum_CentimetersConstant() {
 
         assertEquals(
-                0.393701,
+                1.0 / 30.48,
                 LengthUnit.CENTIMETERS.getConversionFactor(),
                 EPSILON
         );
     }
-
     @Test
     void testConvertToBaseUnit_FeetToFeet() {
 
@@ -1130,7 +1128,7 @@ public class QuantityMeasurementAppTest {
                 LengthUnit.FEET.convertToBaseUnit(5.0);
 
         assertEquals(
-                60.0,
+                5.0,
                 result
         );
     }
@@ -1142,11 +1140,10 @@ public class QuantityMeasurementAppTest {
                 LengthUnit.INCHES.convertToBaseUnit(12.0);
 
         assertEquals(
-                12.0,
+                1.0,
                 result
         );
     }
-
     @Test
     void testConvertToBaseUnit_YardsToFeet() {
 
@@ -1154,11 +1151,10 @@ public class QuantityMeasurementAppTest {
                 LengthUnit.YARDS.convertToBaseUnit(1.0);
 
         assertEquals(
-                36.0,
+                3.0,
                 result
         );
     }
-
     @Test
     void testConvertToBaseUnit_CentimetersToFeet() {
 
@@ -1166,7 +1162,7 @@ public class QuantityMeasurementAppTest {
                 LengthUnit.CENTIMETERS.convertToBaseUnit(30.48);
 
         assertEquals(
-                12.0,
+                1.0,
                 result,
                 EPSILON
         );
@@ -1175,19 +1171,18 @@ public class QuantityMeasurementAppTest {
     void testConvertFromBaseUnit_FeetToFeet() {
 
         double result =
-                LengthUnit.FEET.convertFromBaseUnit(24.0);
+                LengthUnit.FEET.convertFromBaseUnit(2.0);
 
         assertEquals(
                 2.0,
                 result
         );
     }
-
     @Test
     void testConvertFromBaseUnit_FeetToInches() {
 
         double result =
-                LengthUnit.INCHES.convertFromBaseUnit(12.0);
+                LengthUnit.INCHES.convertFromBaseUnit(1.0);
 
         assertEquals(
                 12.0,
@@ -1199,7 +1194,7 @@ public class QuantityMeasurementAppTest {
     void testConvertFromBaseUnit_FeetToYards() {
 
         double result =
-                LengthUnit.YARDS.convertFromBaseUnit(36.0);
+                LengthUnit.YARDS.convertFromBaseUnit(3.0);
 
         assertEquals(
                 1.0,
@@ -1211,7 +1206,7 @@ public class QuantityMeasurementAppTest {
     void testConvertFromBaseUnit_FeetToCentimeters() {
 
         double result =
-                LengthUnit.CENTIMETERS.convertFromBaseUnit(12.0);
+                LengthUnit.CENTIMETERS.convertFromBaseUnit(1.0);
 
         assertEquals(
                 30.48,
@@ -1219,6 +1214,8 @@ public class QuantityMeasurementAppTest {
                 EPSILON
         );
     }
+
+
 
     @Test
     void testQuantityLengthRefactored_Equality() {
