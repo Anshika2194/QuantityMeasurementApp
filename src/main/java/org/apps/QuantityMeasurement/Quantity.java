@@ -3,9 +3,49 @@ package org.apps.QuantityMeasurement;
 import java.util.Objects;
 
 public class Quantity<U extends IMeasurable> {
-
     private static final double EPSILON = 0.0001;
+    private enum ArithmeticOperation {
 
+        ADD {
+            @Override
+            double compute(double left,
+                           double right) {
+
+                return left + right;
+            }
+        },
+
+        SUBTRACT {
+            @Override
+            double compute(double left,
+                           double right) {
+
+                return left - right;
+            }
+        },
+
+        DIVIDE {
+            @Override
+            double compute(double left,
+                           double right) {
+
+                if (Math.abs(right)
+                        < EPSILON) {
+
+                    throw new ArithmeticException(
+                            "Cannot divide by zero"
+                    );
+                }
+
+                return left / right;
+            }
+        };
+
+        abstract double compute(
+                double left,
+                double right
+        );
+    }
     private final double value;
     private final U unit;
 
@@ -69,6 +109,54 @@ public class Quantity<U extends IMeasurable> {
                 targetUnit
         );
     }
+    private void validateArithmeticOperands(
+            Quantity<U> other,
+            U targetUnit,
+            boolean targetUnitRequired
+    ) {
+
+        if (other == null) {
+
+            throw new IllegalArgumentException(
+                    "Quantity cannot be null"
+            );
+        }
+
+        if (targetUnitRequired
+                && targetUnit == null) {
+
+            throw new IllegalArgumentException(
+                    "Target unit cannot be null"
+            );
+        }
+
+        if (!Double.isFinite(this.value)
+                || !Double.isFinite(
+                other.value
+        )) {
+
+            throw new IllegalArgumentException(
+                    "Invalid value"
+            );
+        }
+    }
+    private double performBaseArithmetic(
+            Quantity<U> other,
+            ArithmeticOperation operation
+    ) {
+
+        double thisBaseValue =
+                this.convertToBaseUnit();
+
+        double otherBaseValue =
+                other.convertToBaseUnit();
+
+        return operation.compute(
+                thisBaseValue,
+                otherBaseValue
+        );
+    }
+
 
     public Quantity<U> add(Quantity<U> other) {
 
@@ -82,37 +170,30 @@ public class Quantity<U extends IMeasurable> {
             Quantity<U> other,
             U targetUnit
     ) {
+        validateArithmeticOperands(
+                other,
+                targetUnit,
+                true
+        );
 
-        if (other == null) {
-            throw new IllegalArgumentException(
-                    "Quantity cannot be null"
-            );
-        }
-
-        if (targetUnit == null) {
-            throw new IllegalArgumentException(
-                    "Target unit cannot be null"
-            );
-        }
-
-        double thisBaseValue =
-                this.convertToBaseUnit();
-
-        double otherBaseValue =
-                other.convertToBaseUnit();
-
-        double sumInBaseUnit =
-                thisBaseValue + otherBaseValue;
+        double resultInBaseUnit =
+                performBaseArithmetic(
+                        other,
+                        ArithmeticOperation.ADD
+                );
 
         double resultValue =
                 targetUnit.convertFromBaseUnit(
-                        sumInBaseUnit
+                        resultInBaseUnit
                 );
 
         return new Quantity<>(
                 resultValue,
                 targetUnit
         );
+
+
+
     }
     public Quantity<U> subtract(Quantity<U> other) {
 
@@ -125,57 +206,43 @@ public class Quantity<U extends IMeasurable> {
             Quantity<U> other,
             U targetUnit
     ) {
+        validateArithmeticOperands(
+                other,
+                targetUnit,
+                true
+        );
 
-        if (other == null) {
-            throw new IllegalArgumentException(
-                    "Quantity cannot be null"
-            );
-        }
-
-        if (targetUnit == null) {
-            throw new IllegalArgumentException(
-                    "Target unit cannot be null"
-            );
-        }
-
-        double thisBaseValue =
-                this.convertToBaseUnit();
-
-        double otherBaseValue =
-                other.convertToBaseUnit();
-
-        double differenceInBaseUnit =
-                thisBaseValue - otherBaseValue;
+        double resultInBaseUnit =
+                performBaseArithmetic(
+                        other,
+                        ArithmeticOperation.SUBTRACT
+                );
 
         double resultValue =
                 targetUnit.convertFromBaseUnit(
-                        differenceInBaseUnit
+                        resultInBaseUnit
                 );
 
         return new Quantity<>(
                 resultValue,
                 targetUnit
         );
+
+
     }
     public double divide(Quantity<U> other) {
+        validateArithmeticOperands(
+                other,
+                null,
+                false
+        );
 
-        if (other == null) {
-            throw new IllegalArgumentException(
-                    "Quantity cannot be null"
-            );
-        }
+        return performBaseArithmetic(
+                other,
+                ArithmeticOperation.DIVIDE
+        );
 
-        double otherBaseValue =
-                other.convertToBaseUnit();
 
-        if (Math.abs(otherBaseValue) < EPSILON) {
-            throw new ArithmeticException(
-                    "Cannot divide by zero"
-            );
-        }
-
-        return this.convertToBaseUnit()
-                / otherBaseValue;
     }
 
 
