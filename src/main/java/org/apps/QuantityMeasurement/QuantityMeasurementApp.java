@@ -342,6 +342,87 @@ public class QuantityMeasurementApp {
                 "5 LITRE / 10 LITRE = "
                         + volumeRatio
         );
+        Quantity<TemperatureUnit> celsius =
+                new Quantity<>(
+                        0.0,
+                        TemperatureUnit.CELSIUS
+                );
+
+        Quantity<TemperatureUnit> fahrenheit =
+                new Quantity<>(
+                        32.0,
+                        TemperatureUnit.FAHRENHEIT
+                );
+
+        boolean areTemperaturesEqual =
+                demonstrateEquality(
+                        celsius,
+                        fahrenheit
+                );
+
+        System.out.println(
+                "0 CELSIUS and 32 FAHRENHEIT are equal: "
+                        + areTemperaturesEqual
+        );
+
+        Quantity<TemperatureUnit> kelvin =
+                demonstrateConversion(
+                        celsius,
+                        TemperatureUnit.KELVIN
+                );
+
+        System.out.println(
+                "0 CELSIUS in KELVIN = "
+                        + kelvin
+        );
+
+        try {
+
+            demonstrateAddition(
+                    celsius,
+                    fahrenheit
+            );
+
+        } catch (
+                UnsupportedOperationException e
+        ) {
+
+            System.out.println(
+                    e.getMessage()
+            );
+        }
+
+        try {
+
+            demonstrateSubtraction(
+                    celsius,
+                    fahrenheit
+            );
+
+        } catch (
+                UnsupportedOperationException e
+        ) {
+
+            System.out.println(
+                    e.getMessage()
+            );
+        }
+
+        try {
+
+            demonstrateDivision(
+                    celsius,
+                    fahrenheit
+            );
+
+        } catch (
+                UnsupportedOperationException e
+        ) {
+
+            System.out.println(
+                    e.getMessage()
+            );
+        }
 
     }
 }

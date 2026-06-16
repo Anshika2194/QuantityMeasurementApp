@@ -112,7 +112,8 @@ public class Quantity<U extends IMeasurable> {
     private void validateArithmeticOperands(
             Quantity<U> other,
             U targetUnit,
-            boolean targetUnitRequired
+            boolean targetUnitRequired,
+            String operation
     ) {
 
         if (other == null) {
@@ -139,7 +140,22 @@ public class Quantity<U extends IMeasurable> {
                     "Invalid value"
             );
         }
+
+        if (this.unit.getClass()
+                != other.unit.getClass()) {
+
+            throw new IllegalArgumentException(
+
+                    "Incompatible measurement categories"
+
+            );
+        }
+
+        this.unit.validateOperationSupport(
+                operation
+        );
     }
+
     private double performBaseArithmetic(
             Quantity<U> other,
             ArithmeticOperation operation
@@ -165,36 +181,48 @@ public class Quantity<U extends IMeasurable> {
                 this.unit
         );
     }
-
     public Quantity<U> add(
+
             Quantity<U> other,
+
             U targetUnit
     ) {
+
         validateArithmeticOperands(
+
                 other,
+
                 targetUnit,
-                true
+
+                true,
+
+                "ADD"
         );
 
         double resultInBaseUnit =
+
                 performBaseArithmetic(
+
                         other,
+
                         ArithmeticOperation.ADD
                 );
 
         double resultValue =
+
                 targetUnit.convertFromBaseUnit(
+
                         resultInBaseUnit
                 );
 
         return new Quantity<>(
+
                 resultValue,
+
                 targetUnit
         );
-
-
-
     }
+
     public Quantity<U> subtract(Quantity<U> other) {
 
         return subtract(
@@ -203,47 +231,69 @@ public class Quantity<U extends IMeasurable> {
         );
     }
     public Quantity<U> subtract(
+
             Quantity<U> other,
+
             U targetUnit
     ) {
+
         validateArithmeticOperands(
+
                 other,
+
                 targetUnit,
-                true
+
+                true,
+
+                "SUBTRACT"
         );
 
         double resultInBaseUnit =
+
                 performBaseArithmetic(
+
                         other,
+
                         ArithmeticOperation.SUBTRACT
                 );
 
         double resultValue =
+
                 targetUnit.convertFromBaseUnit(
+
                         resultInBaseUnit
                 );
 
         return new Quantity<>(
+
                 resultValue,
+
                 targetUnit
         );
-
-
     }
-    public double divide(Quantity<U> other) {
+    public double divide(
+            Quantity<U> other
+    ) {
+
         validateArithmeticOperands(
+
                 other,
+
                 null,
-                false
+
+                false,
+
+                "DIVIDE"
         );
 
         return performBaseArithmetic(
+
                 other,
+
                 ArithmeticOperation.DIVIDE
         );
-
-
     }
+
 
 
     @Override
