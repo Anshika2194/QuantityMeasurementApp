@@ -17,6 +17,14 @@ public interface IMeasurable {
 
     String getUnitName();
 
+    // ADD FOR UC15
+
+    String getMeasurementType();
+
+    IMeasurable getUnitInstance(
+            String unitName
+    );
+
     default boolean supportsArithmetic() {
 
         return supportsArithmetic

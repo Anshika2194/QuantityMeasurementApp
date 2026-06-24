@@ -2,8 +2,8 @@
 //import org.junit.jupiter.api.Test;
 //import static org.junit.jupiter.api.Assertions.*;
 //
-//import org.apps.QuantityMeasurement.QuantityMeasurementApp.Feet;
-//import org.apps.QuantityMeasurement.QuantityMeasurementApp.Inches;
+//import org.apps.QuantityMeasurement.app.QuantityMeasurementApp.Feet;
+//import org.apps.QuantityMeasurement.app.QuantityMeasurementApp.Inches;
 //
 //public class QuantityMeasurementAppTest {
 //
@@ -82,10 +82,42 @@
 //}
 package org.apps.QuantityMeasurement;
 
+import org.apps.QuantityMeasurement.app.QuantityMeasurementApp;
+import org.apps.QuantityMeasurement.service.IQuantityMeasurementService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.apps.QuantityMeasurement.controller.QuantityMeasurementController;
+import org.apps.QuantityMeasurement.entity.QuantityDTO;
+import org.apps.QuantityMeasurement.repository.QuantityMeasurementCacheRepository;
+import org.apps.QuantityMeasurement.service.QuantityMeasurementServiceImpl;
+
+
+
+
 
 public class QuantityMeasurementAppTest {
+    private IQuantityMeasurementService service;
+
+    private QuantityMeasurementController controller;
+    @BeforeEach
+    void setup() {
+
+        service =
+
+                new QuantityMeasurementServiceImpl(
+
+                        QuantityMeasurementCacheRepository
+                                .getInstance()
+                );
+
+        controller =
+
+                new QuantityMeasurementController(
+
+                        service
+                );
+    }
 
     @Test
     public void testFeetToFeet_SameValue() {
@@ -2193,82 +2225,82 @@ public class QuantityMeasurementAppTest {
         );
     }
 
-    @Test
-    void testQuantityMeasurementApp_SimplifiedDemonstration_Equality() {
-
-        Quantity<LengthUnit> feet =
-                new Quantity<>(
-                        1.0,
-                        LengthUnit.FEET
-                );
-
-        Quantity<LengthUnit> inches =
-                new Quantity<>(
-                        12.0,
-                        LengthUnit.INCHES
-                );
-
-        assertTrue(
-                QuantityMeasurementApp
-                        .demonstrateEquality(
-                                feet,
-                                inches
-                        )
-        );
-    }
-
-    @Test
-    void testQuantityMeasurementApp_SimplifiedDemonstration_Conversion() {
-
-        Quantity<WeightUnit> kilogram =
-                new Quantity<>(
-                        1.0,
-                        WeightUnit.KILOGRAM
-                );
-
-        Quantity<WeightUnit> result =
-                QuantityMeasurementApp
-                        .demonstrateConversion(
-                                kilogram,
-                                WeightUnit.GRAM
-                        );
-
-        assertEquals(
-                1000.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
-
-    @Test
-    void testQuantityMeasurementApp_SimplifiedDemonstration_Addition() {
-
-        Quantity<WeightUnit> kilogram =
-                new Quantity<>(
-                        1.0,
-                        WeightUnit.KILOGRAM
-                );
-
-        Quantity<WeightUnit> gram =
-                new Quantity<>(
-                        1000.0,
-                        WeightUnit.GRAM
-                );
-
-        Quantity<WeightUnit> result =
-                QuantityMeasurementApp
-                        .demonstrateAddition(
-                                kilogram,
-                                gram,
-                                WeightUnit.KILOGRAM
-                        );
-
-        assertEquals(
-                2.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
+//    @Test
+//    void testQuantityMeasurementApp_SimplifiedDemonstration_Equality() {
+//
+//        Quantity<LengthUnit> feet =
+//                new Quantity<>(
+//                        1.0,
+//                        LengthUnit.FEET
+//                );
+//
+//        Quantity<LengthUnit> inches =
+//                new Quantity<>(
+//                        12.0,
+//                        LengthUnit.INCHES
+//                );
+//
+//        assertTrue(
+//                QuantityMeasurementApp
+//                        .demonstrateEquality(
+//                                feet,
+//                                inches
+//                        )
+//        );
+//    }
+//
+//    @Test
+//    void testQuantityMeasurementApp_SimplifiedDemonstration_Conversion() {
+//
+//        Quantity<WeightUnit> kilogram =
+//                new Quantity<>(
+//                        1.0,
+//                        WeightUnit.KILOGRAM
+//                );
+//
+//        Quantity<WeightUnit> result =
+//                QuantityMeasurementApp
+//                        .demonstrateConversion(
+//                                kilogram,
+//                                WeightUnit.GRAM
+//                        );
+//
+//        assertEquals(
+//                1000.0,
+//                result.getValue(),
+//                EPSILON
+//        );
+//    }
+//
+//    @Test
+//    void testQuantityMeasurementApp_SimplifiedDemonstration_Addition() {
+//
+//        Quantity<WeightUnit> kilogram =
+//                new Quantity<>(
+//                        1.0,
+//                        WeightUnit.KILOGRAM
+//                );
+//
+//        Quantity<WeightUnit> gram =
+//                new Quantity<>(
+//                        1000.0,
+//                        WeightUnit.GRAM
+//                );
+//
+//        Quantity<WeightUnit> result =
+//                QuantityMeasurementApp
+//                        .demonstrateAddition(
+//                                kilogram,
+//                                gram,
+//                                WeightUnit.KILOGRAM
+//                        );
+//
+//        assertEquals(
+//                2.0,
+//                result.getValue(),
+//                EPSILON
+//        );
+//    }
 
     @Test
     void testTypeWildcard_FlexibleSignatures() {
@@ -4495,6 +4527,480 @@ public class QuantityMeasurementAppTest {
                                 .validateOperationSupport(
                                         "ADD"
                                 )
+        );
+    }
+    // ================= UC15 TESTS =================
+
+
+    @Test
+    void testController_NullService_Prevention() {
+
+        assertThrows(
+
+                IllegalArgumentException.class,
+
+                () ->
+
+                        new QuantityMeasurementController(
+
+                                null
+                        )
+        );
+    }
+
+
+    @Test
+    void testService_NullRepository_Prevention() {
+
+        assertThrows(
+
+                IllegalArgumentException.class,
+
+                () ->
+
+                        new QuantityMeasurementServiceImpl(
+
+                                null
+                        )
+        );
+    }
+
+
+    @Test
+    void testService_AllMeasurementCategories() {
+
+        assertTrue(
+
+                service.compare(
+
+                        new QuantityDTO(
+
+                                1,
+
+                                "FEET",
+
+                                "LENGTH"
+                        ),
+
+                        new QuantityDTO(
+
+                                12,
+
+                                "INCHES",
+
+                                "LENGTH"
+                        )
+                )
+        );
+
+        assertTrue(
+
+                service.compare(
+
+                        new QuantityDTO(
+
+                                1,
+
+                                "KILOGRAM",
+
+                                "WEIGHT"
+                        ),
+
+                        new QuantityDTO(
+
+                                1000,
+
+                                "GRAM",
+
+                                "WEIGHT"
+                        )
+                )
+        );
+
+        assertTrue(
+
+                service.compare(
+
+                        new QuantityDTO(
+
+                                1,
+
+                                "LITRE",
+
+                                "VOLUME"
+                        ),
+
+                        new QuantityDTO(
+
+                                1000,
+
+                                "MILLILITRE",
+
+                                "VOLUME"
+                        )
+                )
+        );
+
+        assertTrue(
+
+                service.compare(
+
+                        new QuantityDTO(
+
+                                0,
+
+                                "CELSIUS",
+
+                                "TEMPERATURE"
+                        ),
+
+                        new QuantityDTO(
+
+                                32,
+
+                                "FAHRENHEIT",
+
+                                "TEMPERATURE"
+                        )
+                )
+        );
+    }
+
+
+    @Test
+    void testController_AllOperations() {
+
+        assertNotNull(
+
+                controller.performAdd(
+
+                        new QuantityDTO(
+
+                                1,
+
+                                "FEET",
+
+                                "LENGTH"
+                        ),
+
+                        new QuantityDTO(
+
+                                12,
+
+                                "INCHES",
+
+                                "LENGTH"
+                        )
+                )
+        );
+
+        assertNotNull(
+
+                controller.performSubtract(
+
+                        new QuantityDTO(
+
+                                10,
+
+                                "FEET",
+
+                                "LENGTH"
+                        ),
+
+                        new QuantityDTO(
+
+                                6,
+
+                                "INCHES",
+
+                                "LENGTH"
+                        )
+                )
+        );
+
+        assertEquals(
+
+                5,
+
+                controller.performDivide(
+
+                        new QuantityDTO(
+
+                                10,
+
+                                "FEET",
+
+                                "LENGTH"
+                        ),
+
+                        new QuantityDTO(
+
+                                2,
+
+                                "FEET",
+
+                                "LENGTH"
+                        )
+                )
+        );
+    }
+
+
+    @Test
+    void testDataFlow_ControllerToService() {
+
+        QuantityDTO result =
+
+                controller.performConvert(
+
+                        new QuantityDTO(
+
+                                1,
+
+                                "FEET",
+
+                                "LENGTH"
+                        ),
+
+                        new QuantityDTO(
+
+                                0,
+
+                                "INCHES",
+
+                                "LENGTH"
+                        )
+                );
+
+        assertEquals(
+
+                "INCHES",
+
+                result.getUnit()
+        );
+    }
+
+
+    @Test
+    void testDataFlow_ServiceToController() {
+
+        QuantityDTO result =
+
+                controller.performAdd(
+
+                        new QuantityDTO(
+
+                                1,
+
+                                "FEET",
+
+                                "LENGTH"
+                        ),
+
+                        new QuantityDTO(
+
+                                12,
+
+                                "INCHES",
+
+                                "LENGTH"
+                        )
+                );
+
+        assertNotNull(
+
+                result
+        );
+    }
+
+
+    @Test
+    void testService_ExceptionHandling_AllOperations() {
+
+        assertThrows(
+
+                Exception.class,
+
+                () ->
+
+                        service.add(
+
+                                new QuantityDTO(
+
+                                        0,
+
+                                        "CELSIUS",
+
+                                        "TEMPERATURE"
+                                ),
+
+                                new QuantityDTO(
+
+                                        32,
+
+                                        "FAHRENHEIT",
+
+                                        "TEMPERATURE"
+                                )
+                        )
+        );
+
+        assertThrows(
+
+                Exception.class,
+
+                () ->
+
+                        service.subtract(
+
+                                new QuantityDTO(
+
+                                        0,
+
+                                        "CELSIUS",
+
+                                        "TEMPERATURE"
+                                ),
+
+                                new QuantityDTO(
+
+                                        32,
+
+                                        "FAHRENHEIT",
+
+                                        "TEMPERATURE"
+                                )
+                        )
+        );
+
+        assertThrows(
+
+                Exception.class,
+
+                () ->
+
+                        service.divide(
+
+                                new QuantityDTO(
+
+                                        0,
+
+                                        "CELSIUS",
+
+                                        "TEMPERATURE"
+                                ),
+
+                                new QuantityDTO(
+
+                                        32,
+
+                                        "FAHRENHEIT",
+
+                                        "TEMPERATURE"
+                                )
+                        )
+        );
+    }
+
+
+    @Test
+    void testLayerSeparation_ServiceIndependence() {
+
+        IQuantityMeasurementService localService =
+
+                new QuantityMeasurementServiceImpl(
+
+                        QuantityMeasurementCacheRepository
+
+                                .getInstance()
+                );
+
+        assertNotNull(
+
+                localService
+        );
+    }
+
+
+    @Test
+    void testLayerSeparation_ControllerIndependence() {
+
+        QuantityMeasurementController localController =
+
+                new QuantityMeasurementController(
+
+                        service
+                );
+
+        assertNotNull(
+
+                localController
+        );
+    }
+
+
+    @Test
+    void testIntegration_EndToEnd_LengthAddition() {
+
+        QuantityDTO result =
+
+                controller.performAdd(
+
+                        new QuantityDTO(
+
+                                1,
+
+                                "FEET",
+
+                                "LENGTH"
+                        ),
+
+                        new QuantityDTO(
+
+                                12,
+
+                                "INCHES",
+
+                                "LENGTH"
+                        )
+                );
+
+        assertNotNull(
+
+                result
+        );
+    }
+
+
+    @Test
+    void testIntegration_EndToEnd_TemperatureUnsupported() {
+
+        assertThrows(
+
+                Exception.class,
+
+                () ->
+
+                        controller.performAdd(
+
+                                new QuantityDTO(
+
+                                        0,
+
+                                        "CELSIUS",
+
+                                        "TEMPERATURE"
+                                ),
+
+                                new QuantityDTO(
+
+                                        32,
+
+                                        "FAHRENHEIT",
+
+                                        "TEMPERATURE"
+                                )
+                        )
         );
     }
 

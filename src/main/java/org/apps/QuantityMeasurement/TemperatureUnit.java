@@ -96,6 +96,24 @@ public enum TemperatureUnit
         return unitName;
     }
 
+    // ---------- UC15 additions ----------
+
+    @Override
+    public String getMeasurementType() {
+
+        return "TEMPERATURE";
+    }
+
+    @Override
+    public IMeasurable getUnitInstance(
+            String unitName
+    ) {
+
+        return TemperatureUnit.valueOf(
+                unitName
+        );
+    }
+
     @Override
     public boolean supportsArithmetic() {
 
