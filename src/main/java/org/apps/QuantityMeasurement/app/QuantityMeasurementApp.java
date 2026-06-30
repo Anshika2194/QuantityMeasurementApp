@@ -4,6 +4,7 @@ import org.apps.QuantityMeasurement.controller.QuantityMeasurementController;
 import org.apps.QuantityMeasurement.entity.QuantityDTO;
 import org.apps.QuantityMeasurement.repository.QuantityMeasurementCacheRepository;
 import org.apps.QuantityMeasurement.service.QuantityMeasurementServiceImpl;
+import org.apps.QuantityMeasurement.repository.QuantityMeasurementDatabaseRepository;
 
 public class QuantityMeasurementApp {
 
@@ -14,7 +15,7 @@ public class QuantityMeasurementApp {
 
                         new QuantityMeasurementServiceImpl(
 
-                                QuantityMeasurementCacheRepository
+                                QuantityMeasurementDatabaseRepository
                                         .getInstance()
                         )
                 );

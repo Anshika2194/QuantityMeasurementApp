@@ -1,17 +1,23 @@
 package org.apps.QuantityMeasurement.service;
 
-import org.apps.QuantityMeasurement.*;
-
 import org.apps.QuantityMeasurement.entity.QuantityDTO;
 import org.apps.QuantityMeasurement.entity.QuantityMeasurementEntity;
 
 import org.apps.QuantityMeasurement.exception.QuantityMeasurementException;
 
+import org.apps.QuantityMeasurement.quantity.Quantity;
 import org.apps.QuantityMeasurement.repository.IQuantityMeasurementRepository;
+import org.apps.QuantityMeasurement.unit.*;
+
+import java.util.logging.Logger;
 
 public class QuantityMeasurementServiceImpl
 
         implements IQuantityMeasurementService {
+    private static final Logger logger =
+            Logger.getLogger(
+                    QuantityMeasurementServiceImpl.class.getName()
+            );
 
     private final
     IQuantityMeasurementRepository
@@ -34,6 +40,9 @@ public class QuantityMeasurementServiceImpl
 
         this.repository =
                 repository;
+        logger.info(
+                "QuantityMeasurementService initialized."
+        );
     }
 
     @Override
@@ -44,6 +53,9 @@ public class QuantityMeasurementServiceImpl
 
             QuantityDTO thatQuantityDTO
     ) {
+        logger.info(
+                "Performing COMPARE operation."
+        );
 
         try {
 
@@ -89,7 +101,10 @@ public class QuantityMeasurementServiceImpl
 
                 RuntimeException exception
         ) {
-
+            logger.severe(
+                    "COMPARE failed : "
+                            + exception.getMessage()
+            );
             throw saveAndCreateException(
 
                     thisQuantityDTO,
@@ -111,7 +126,9 @@ public class QuantityMeasurementServiceImpl
 
             QuantityDTO targetUnitDTO
     ) {
-
+        logger.info(
+                "Performing CONVERT operation."
+        );
         try {
 
             Quantity<IMeasurable>
@@ -163,6 +180,10 @@ public class QuantityMeasurementServiceImpl
 
                 RuntimeException exception
         ) {
+            logger.severe(
+                    "CONVERT failed : "
+                            + exception.getMessage()
+            );
 
             throw saveAndCreateException(
 
@@ -206,6 +227,9 @@ public class QuantityMeasurementServiceImpl
 
             QuantityDTO targetUnitDTO
     ) {
+        logger.info(
+                "Performing ADD operation."
+        );
 
         try {
 
@@ -268,6 +292,10 @@ public class QuantityMeasurementServiceImpl
 
                 RuntimeException exception
         ) {
+            logger.severe(
+                    "ADD failed : "
+                            + exception.getMessage()
+            );
 
             throw saveAndCreateException(
 
@@ -311,6 +339,9 @@ public class QuantityMeasurementServiceImpl
 
             QuantityDTO targetUnitDTO
     ) {
+        logger.info(
+                "Performing SUBTRACT operation."
+        );
 
         try {
 
@@ -373,6 +404,10 @@ public class QuantityMeasurementServiceImpl
 
                 RuntimeException exception
         ) {
+            logger.severe(
+                    "SUBTRACT failed : "
+                            + exception.getMessage()
+            );
 
             throw saveAndCreateException(
 
@@ -395,6 +430,9 @@ public class QuantityMeasurementServiceImpl
 
             QuantityDTO thatQuantityDTO
     ) {
+        logger.info(
+                "Performing DIVIDE operation."
+        );
 
         try {
 
@@ -440,6 +478,10 @@ public class QuantityMeasurementServiceImpl
 
                 RuntimeException exception
         ) {
+            logger.severe(
+                    "DIVIDE failed : "
+                            + exception.getMessage()
+            );
 
             throw saveAndCreateException(
 
@@ -556,6 +598,15 @@ public class QuantityMeasurementServiceImpl
 
             RuntimeException exception
     ) {
+
+        logger.severe(
+
+                operation
+
+                        + " operation failed : "
+
+                        + exception.getMessage()
+        );
 
         repository.save(
 

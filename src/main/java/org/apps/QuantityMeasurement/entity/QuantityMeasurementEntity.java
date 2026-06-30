@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class QuantityMeasurementEntity
         implements Serializable {
+    private int id;
 
     private static final long serialVersionUID = 1L;
 
@@ -99,7 +100,17 @@ public class QuantityMeasurementEntity
 
         this.isError = isError;
     }
+    public int getId() {
 
+        return id;
+    }
+
+    public void setId(
+            int id
+    ) {
+
+        this.id = id;
+    }
     public QuantityDTO getThisQuantity() {
 
         return thisQuantity;

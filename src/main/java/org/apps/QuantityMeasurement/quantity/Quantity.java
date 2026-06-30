@@ -1,5 +1,7 @@
 
-package org.apps.QuantityMeasurement;
+package org.apps.QuantityMeasurement.quantity;
+import org.apps.QuantityMeasurement.unit.IMeasurable;
+
 import java.util.Objects;
 
 public class Quantity<U extends IMeasurable> {

@@ -1,9 +1,13 @@
 package org.apps.QuantityMeasurement.controller;
-
+import java.util.logging.Logger;
 import org.apps.QuantityMeasurement.entity.QuantityDTO;
 import org.apps.QuantityMeasurement.service.IQuantityMeasurementService;
 
 public class QuantityMeasurementController {
+    private static final Logger logger =
+            Logger.getLogger(
+                    QuantityMeasurementController.class.getName()
+            );
 
     private final IQuantityMeasurementService service;
 

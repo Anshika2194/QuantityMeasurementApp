@@ -10,6 +10,6 @@ public interface IQuantityMeasurementRepository {
             QuantityMeasurementEntity entity
     );
 
-    List<QuantityMeasurementEntity>
-    findAll();
+    List<QuantityMeasurementEntity> findAll();
+
 }

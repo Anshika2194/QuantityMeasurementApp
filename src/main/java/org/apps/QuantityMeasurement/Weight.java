@@ -1,5 +1,7 @@
 package org.apps.QuantityMeasurement;
 
+import org.apps.QuantityMeasurement.unit.WeightUnit;
+
 public class Weight {
     private static final double EPSILON = 0.0001;
     private final double value;

@@ -1,5 +1,7 @@
 package org.apps.QuantityMeasurement;
 
+import org.apps.QuantityMeasurement.unit.LengthUnit;
+
 public class Length {
     private static final double EPSILON = 0.000001;
     private final double value;

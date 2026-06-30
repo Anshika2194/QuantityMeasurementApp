@@ -82,8 +82,9 @@
 //}
 package org.apps.QuantityMeasurement;
 
-import org.apps.QuantityMeasurement.app.QuantityMeasurementApp;
+import org.apps.QuantityMeasurement.quantity.Quantity;
 import org.apps.QuantityMeasurement.service.IQuantityMeasurementService;
+import org.apps.QuantityMeasurement.unit.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
