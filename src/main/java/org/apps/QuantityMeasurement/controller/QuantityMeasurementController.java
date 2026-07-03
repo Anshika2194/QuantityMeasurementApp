@@ -1,115 +1,126 @@
 package org.apps.QuantityMeasurement.controller;
-import java.util.logging.Logger;
-import org.apps.QuantityMeasurement.entity.QuantityDTO;
-import org.apps.QuantityMeasurement.service.IQuantityMeasurementService;
 
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.apps.QuantityMeasurement.model.QuantityDTO;
+import org.apps.QuantityMeasurement.model.QuantityInputDTO;
+import org.apps.QuantityMeasurement.model.QuantityMeasurementDTO;
+import org.apps.QuantityMeasurement.service.IQuantityMeasurementService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/quantity")
+@RequiredArgsConstructor
 public class QuantityMeasurementController {
-    private static final Logger logger =
-            Logger.getLogger(
-                    QuantityMeasurementController.class.getName()
-            );
 
     private final IQuantityMeasurementService service;
 
-    public QuantityMeasurementController(
-            IQuantityMeasurementService service
-    ) {
-        if (service == null) {
-
-            throw new IllegalArgumentException(
-
-                    "Service cannot be null"
-            );
-        }
-
-        this.service = service;
-    }
-
-    public boolean performCompare(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2
+    @PostMapping("/compare")
+    public ResponseEntity<Boolean> compare(
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO
     ) {
 
-        return service.compare(
-                quantity1,
-                quantity2
+        return ResponseEntity.ok(
+                service.compare(inputDTO)
         );
     }
 
-    public QuantityDTO performConvert(
-            QuantityDTO quantity,
-            QuantityDTO targetUnit
+    @PostMapping("/convert")
+    public ResponseEntity<QuantityDTO> convert(
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO
     ) {
 
-        return service.convert(
-                quantity,
-                targetUnit
+        return ResponseEntity.ok(
+                service.convert(inputDTO)
         );
     }
 
-    public QuantityDTO performAdd(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2
+    @PostMapping("/add")
+    public ResponseEntity<QuantityDTO> add(
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO
     ) {
 
-        return service.add(
-                quantity1,
-                quantity2
+        return ResponseEntity.ok(
+                service.add(inputDTO)
         );
     }
 
-    public QuantityDTO performAdd(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2,
-            QuantityDTO targetUnit
+    @PostMapping("/subtract")
+    public ResponseEntity<QuantityDTO> subtract(
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO
     ) {
 
-        return service.add(
-                quantity1,
-                quantity2,
-                targetUnit
+        return ResponseEntity.ok(
+                service.subtract(inputDTO)
         );
     }
 
-    public QuantityDTO performSubtract(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2
+    @PostMapping("/divide")
+    public ResponseEntity<Double> divide(
+            @Valid
+            @RequestBody
+            QuantityInputDTO inputDTO
     ) {
 
-        return service.subtract(
-                quantity1,
-                quantity2
+        return ResponseEntity.ok(
+                service.divide(inputDTO)
         );
     }
 
-    public QuantityDTO performSubtract(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2,
-            QuantityDTO targetUnit
-    ) {
+    @GetMapping("/history")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getHistory() {
 
-        return service.subtract(
-                quantity1,
-                quantity2,
-                targetUnit
+        return ResponseEntity.ok(
+                service.getHistory()
         );
     }
 
-    public double performDivide(
-            QuantityDTO quantity1,
-            QuantityDTO quantity2
+    @GetMapping("/history/{operation}")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getHistoryByOperation(
+            @PathVariable String operation
     ) {
 
-        return service.divide(
-                quantity1,
-                quantity2
+        return ResponseEntity.ok(
+                service.getHistoryByOperation(operation)
         );
     }
 
-    public void displayResult(
-            Object result
+    @GetMapping("/measurement/{measurementType}")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getHistoryByMeasurementType(
+            @PathVariable String measurementType
     ) {
 
-        System.out.println(result);
+        return ResponseEntity.ok(
+                service.getHistoryByMeasurementType(measurementType)
+        );
+    }
+
+    @GetMapping("/errors")
+    public ResponseEntity<List<QuantityMeasurementDTO>> getErroredOperations() {
+
+        return ResponseEntity.ok(
+                service.getErroredOperations()
+        );
+    }
+
+    @GetMapping("/count/{operation}")
+    public ResponseEntity<Long> getOperationCount(
+            @PathVariable String operation
+    ) {
+
+        return ResponseEntity.ok(
+                service.getOperationCount(operation)
+        );
     }
 }

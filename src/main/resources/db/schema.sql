@@ -1,31 +1,32 @@
-CREATE TABLE IF NOT EXISTS quantity_measurement (
+CREATE TABLE IF NOT EXISTS quantity_measurement_history (
 
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
-    first_value DOUBLE NOT NULL,
+    this_value DOUBLE NOT NULL,
 
-    first_unit VARCHAR(50) NOT NULL,
+    this_unit VARCHAR(30) NOT NULL,
 
-    first_measurement_type VARCHAR(50) NOT NULL,
+    this_measurement_type VARCHAR(30) NOT NULL,
 
-    second_value DOUBLE,
+    that_value DOUBLE NOT NULL,
 
-    second_unit VARCHAR(50),
+    that_unit VARCHAR(30) NOT NULL,
 
-    second_measurement_type VARCHAR(50),
+    that_measurement_type VARCHAR(30) NOT NULL,
 
     operation VARCHAR(30) NOT NULL,
 
-    result VARCHAR(100),
+    result_value DOUBLE,
+
+    result_unit VARCHAR(30),
+
+    result_measurement_type VARCHAR(30),
+
+    result_string VARCHAR(255),
 
     error_message VARCHAR(255),
 
-    is_error BOOLEAN NOT NULL
+    is_error BOOLEAN DEFAULT FALSE,
 
+    created_at TIMESTAMP
 );
-
-CREATE INDEX IF NOT EXISTS idx_operation
-ON quantity_measurement(operation);
-
-CREATE INDEX IF NOT EXISTS idx_measurement_type
-ON quantity_measurement(first_measurement_type);

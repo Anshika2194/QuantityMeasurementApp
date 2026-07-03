@@ -1,222 +1,79 @@
 package org.apps.QuantityMeasurement.entity;
 
-import java.io.Serializable;
-import java.util.Objects;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class QuantityMeasurementEntity
-        implements Serializable {
-    private int id;
+import java.time.LocalDateTime;
 
-    private static final long serialVersionUID = 1L;
+@Entity
+@Table(name = "quantity_measurement_history")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class QuantityMeasurementEntity {
 
-    private final QuantityDTO thisQuantity;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final QuantityDTO thatQuantity;
+    // First Quantity
 
-    private final String operation;
+    @Column(nullable = false)
+    private Double thisValue;
 
-    private final Object result;
+    @Column(nullable = false, length = 30)
+    private String thisUnit;
 
-    private final String errorMessage;
+    @Column(nullable = false, length = 30)
+    private String thisMeasurementType;
 
-    private final boolean isError;
+    // Second Quantity
 
-    // For arithmetic operations
+    @Column(nullable = false)
+    private Double thatValue;
 
-    public QuantityMeasurementEntity(
+    @Column(nullable = false, length = 30)
+    private String thatUnit;
 
-            QuantityDTO thisQuantity,
+    @Column(nullable = false, length = 30)
+    private String thatMeasurementType;
 
-            QuantityDTO thatQuantity,
+    // Operation
 
-            String operation,
+    @Column(nullable = false, length = 30)
+    private String operation;
 
-            QuantityDTO result
-    ) {
+    // Result
 
-        this.thisQuantity = thisQuantity;
+    private Double resultValue;
 
-        this.thatQuantity = thatQuantity;
+    @Column(length = 30)
+    private String resultUnit;
 
-        this.operation = operation;
+    @Column(length = 30)
+    private String resultMeasurementType;
 
-        this.result = result;
+    @Column(length = 255)
+    private String resultString;
 
-        this.errorMessage = null;
+    // Error
 
-        this.isError = false;
-    }
+    @Column(length = 255)
+    private String errorMessage;
 
-    // For comparison and division
+    @Column(nullable = false)
+    private boolean isError = false;
 
-    public QuantityMeasurementEntity(
+    // Audit
 
-            QuantityDTO thisQuantity,
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-            QuantityDTO thatQuantity,
+    @PrePersist
+    public void onCreate() {
 
-            String operation,
-
-            Object result
-    ) {
-
-        this.thisQuantity = thisQuantity;
-
-        this.thatQuantity = thatQuantity;
-
-        this.operation = operation;
-
-        this.result = result;
-
-        this.errorMessage = null;
-
-        this.isError = false;
-    }
-
-    // For errors
-
-    public QuantityMeasurementEntity(
-
-            QuantityDTO thisQuantity,
-
-            QuantityDTO thatQuantity,
-
-            String operation,
-
-            String errorMessage,
-
-            boolean isError
-    ) {
-
-        this.thisQuantity = thisQuantity;
-
-        this.thatQuantity = thatQuantity;
-
-        this.operation = operation;
-
-        this.result = null;
-
-        this.errorMessage = errorMessage;
-
-        this.isError = isError;
-    }
-    public int getId() {
-
-        return id;
-    }
-
-    public void setId(
-            int id
-    ) {
-
-        this.id = id;
-    }
-    public QuantityDTO getThisQuantity() {
-
-        return thisQuantity;
-    }
-
-    public QuantityDTO getThatQuantity() {
-
-        return thatQuantity;
-    }
-
-    public String getOperation() {
-
-        return operation;
-    }
-
-    public Object getResult() {
-
-        return result;
-    }
-
-    public String getErrorMessage() {
-
-        return errorMessage;
-    }
-
-    public boolean isError() {
-
-        return isError;
-    }
-
-    @Override
-    public boolean equals(
-            Object obj
-    ) {
-
-        if (this == obj) {
-
-            return true;
-        }
-
-        if (obj == null
-                || getClass()
-                != obj.getClass()) {
-
-            return false;
-        }
-
-        QuantityMeasurementEntity other =
-
-                (QuantityMeasurementEntity) obj;
-
-        return Objects.equals(
-                thisQuantity,
-                other.thisQuantity
-        )
-
-                && Objects.equals(
-                thatQuantity,
-                other.thatQuantity
-        )
-
-                && Objects.equals(
-                operation,
-                other.operation
-        )
-
-                && Objects.equals(
-                result,
-                other.result
-        )
-
-                && Objects.equals(
-                errorMessage,
-                other.errorMessage
-        )
-
-                && isError
-                == other.isError;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(
-
-                thisQuantity,
-
-                thatQuantity,
-
-                operation,
-
-                result,
-
-                errorMessage,
-
-                isError
-        );
-    }
-
-    @Override
-    public String toString() {
-
-        return isError
-
-                ? errorMessage
-
-                : String.valueOf(result);
+        createdAt = LocalDateTime.now();
     }
 }
