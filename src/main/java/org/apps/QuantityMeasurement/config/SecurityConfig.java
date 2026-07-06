@@ -1,16 +1,33 @@
 package org.apps.QuantityMeasurement.config;
 
+import lombok.RequiredArgsConstructor;
+import org.apps.QuantityMeasurement.security.CustomOAuth2UserService;
+import org.apps.QuantityMeasurement.security.JwtAuthenticationFilter;
+import org.apps.QuantityMeasurement.security.OAuth2LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final OAuth2LoginSuccessHandler successHandler;
+
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -31,13 +48,7 @@ public class SecurityConfig {
                     );
 
                     configuration.setAllowedMethods(
-                            List.of(
-                                    "GET",
-                                    "POST",
-                                    "PUT",
-                                    "DELETE",
-                                    "OPTIONS"
-                            )
+                            List.of("*")
                     );
 
                     configuration.setAllowedHeaders(
@@ -47,22 +58,56 @@ public class SecurityConfig {
                     return configuration;
                 }))
 
-                .authorizeHttpRequests(authorize -> authorize
+                .sessionManagement(session ->
+
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
+                )
+
+                .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(
+                                "/api/auth/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/api-docs/**",
                                 "/h2-console/**"
-                        ).permitAll()
+                        )
+
+                        .permitAll()
 
                         .anyRequest()
 
-                        .permitAll()
+                        .authenticated()
+                )
+
+                .oauth2Login(oauth ->
+
+                        oauth
+
+                                .userInfoEndpoint(userInfo ->
+
+                                        userInfo.userService(
+                                                customOAuth2UserService
+                                        )
+                                )
+
+                                .successHandler(
+                                        successHandler
+                                )
+                )
+
+                .addFilterBefore(
+
+                        jwtAuthenticationFilter,
+
+                        UsernamePasswordAuthenticationFilter.class
                 )
 
                 .headers(headers ->
+
                         headers.frameOptions(
                                 frame -> frame.disable()
                         )
