@@ -1,0 +1,4 @@
+.wrapper { padding: 60px 24px 90px; }
+.wrapper h1 { font-size: 2rem; margin-bottom: 16px; text-align: center; }
+.intro { max-width: 680px; margin: 0 auto 48px; text-align: center; color: var(--text-muted); line-height: 1.7; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }

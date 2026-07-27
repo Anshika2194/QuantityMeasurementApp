@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -17,6 +18,9 @@ public class OAuth2LoginSuccessHandler
         implements AuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
+
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -34,27 +38,9 @@ public class OAuth2LoginSuccessHandler
         String token =
                 jwtUtil.generateToken(email);
 
-        response.setContentType("text/html");
+        String redirectUrl =
+                frontendUrl + "/#/login/callback?token=" + token;
 
-        response.getWriter().write("""
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login Successful</title>
-</head>
-<body>
-
-<script>
-
-localStorage.setItem("jwt","%s");
-
-window.location.href="/index.html";
-
-</script>
-
-</body>
-</html>
-""".formatted(token));
-
+        response.sendRedirect(redirectUrl);
     }
 }

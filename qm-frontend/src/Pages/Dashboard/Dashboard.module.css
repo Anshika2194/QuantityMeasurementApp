@@ -1,0 +1,7 @@
+.wrapper { padding: 48px 24px 80px; display: flex; flex-direction: column; gap: 28px; }
+.welcomeCard { display: flex; align-items: center; gap: 18px; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; padding: 28px 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-soft); }
+.welcomeCard h1 { font-size: 1.4rem; }
+.welcomeCard p { opacity: 0.9; font-size: 0.9rem; }
+.quickNav { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+.navCard { display: flex; align-items: center; gap: 12px; background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 20px 22px; border-radius: var(--radius-md); font-weight: 600; color: var(--primary-dark); box-shadow: var(--shadow-soft); transition: transform 0.2s ease; }
+.navCard:hover { transform: translateY(-4px); }

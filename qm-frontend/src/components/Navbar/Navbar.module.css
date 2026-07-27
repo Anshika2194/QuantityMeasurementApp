@@ -1,0 +1,33 @@
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+.inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.3rem; color: var(--primary-dark); }
+.brandIcon { font-size: 1.5rem; color: var(--primary); }
+.toggle { display: none; background: none; color: var(--text-main); }
+.links { display: flex; align-items: center; gap: 28px; }
+.link { font-weight: 500; color: var(--text-muted); position: relative; padding: 6px 0; transition: color 0.2s ease; }
+.link:hover, .active { color: var(--primary-dark); }
+.ctaLink {
+  background: var(--primary); color: #fff !important; padding: 10px 22px; border-radius: 999px;
+  font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.ctaLink:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.profile { font-size: 0.85rem; color: var(--text-muted); padding: 6px 14px; background: rgba(108,92,231,0.08); border-radius: 999px; }
+.logoutBtn { background: var(--danger); color: #fff; padding: 8px 18px; border-radius: 999px; font-weight: 600; transition: opacity 0.2s ease; }
+.logoutBtn:hover { opacity: 0.85; }
+
+@media (max-width: 860px) {
+  .toggle { display: block; }
+  .links {
+    position: absolute; top: 72px; left: 0; right: 0;
+    background: rgba(255,255,255,0.95);
+    flex-direction: column; align-items: flex-start; gap: 0;
+    max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+  }
+  .linksOpen { max-height: 400px; padding: 12px 24px 24px; }
+  .links > * { width: 100%; padding: 12px 0; }
+}
