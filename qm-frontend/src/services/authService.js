@@ -1,4 +1,4 @@
-const LOGIN_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`
+const LOGIN_URL = `${import.meta.env.VITE_AUTH_SERVICE_URL}/oauth2/authorization/google`
 
 export const authService = {
   loginWithGoogle: () => {

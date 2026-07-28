@@ -5,6 +5,7 @@ import styles from './Login.module.css'
 
 export default function Login() {
   const { login } = useAuth()
+
   return (
     <section className={styles.wrapper}>
       <div className={styles.card}>

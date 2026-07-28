@@ -8,7 +8,7 @@ export default function Footer() {
         <div className={styles.brand}>
           <FaRulerCombined /> <span>QuantityMeasurement</span>
         </div>
-        <p>&copy; {new Date().getFullYear()} QuantiFy. Built with Spring Boot & React.</p>
+        <p>&copy; {new Date().getFullYear()} QuantityMeasurement. Built with Spring Boot & React.</p>
         <div className={styles.socials}>
           <a href="https://github.com" target="_blank" rel="noreferrer"><FaGithub /></a>
           <a href="https://linkedin.com" target="_blank" rel="noreferrer"><FaLinkedin /></a>
